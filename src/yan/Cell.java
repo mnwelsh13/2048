@@ -15,6 +15,10 @@ public class Cell {
 	// col of the board
 	private int col;
 	
+	public Cell(int value) {
+		this.value = value;
+	}
+	
 	// getters and setters
 	public Cell getNext() {
 		return next;
