@@ -6,26 +6,17 @@ package yan;
  *
  */
 public class Cell {
-	// pointer to the next node
-	private Cell next;
 	// value of the cell
 	private int value;
 	// row of the board
 	private int row;
 	// col of the board
 	private int col;
+	// pointer to the next
+	private Cell next;
 	
 	public Cell(int value) {
 		this.value = value;
-	}
-	
-	// getters and setters
-	public Cell getNext() {
-		return next;
-	}
-	
-	public void setNext(Cell next) {
-		this.next = next;
 	}
 	
 	public int getValue() {
@@ -50,5 +41,17 @@ public class Cell {
 
 	public void setCol(int col) {
 		this.col = col;
+	}
+	
+	public void doubleValue() {
+		this.value *= 2;
+	}
+
+	public Cell getNext() {
+		return next;
+	}
+
+	public void setNext(Cell next) {
+		this.next = next;
 	}
 }
