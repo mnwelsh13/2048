@@ -10,7 +10,7 @@ import java.util.Scanner;
  */
 public class Controller {
 	// the board of the game to hold the cells
-	private Cell[][] board = new Cell[4][4];
+	private Cell[][] board;
 	// a queue to hold the cells which don't have a value;
 	private LinkedList<Integer> idles = new LinkedList<Integer>();
 
@@ -18,6 +18,8 @@ public class Controller {
 	 * Initialization, put all the cells into idleQueue;
 	 */
 	public Controller() {
+		board = new Cell[4][4];
+		
 		for(int i = 0; i < 16; i++) {
 			idles.add(i);
 		}
@@ -26,7 +28,12 @@ public class Controller {
 	/**
 	 * Create the game with two cells.
 	 */
-	public void createGame() {
+	public void newGame() {
+		board = new Cell[4][4];
+		
+		for(int i = 0; i < 16; i++) {
+			idles.add(i);
+		}
 		// add two cells to the board
 		createNewCell();
 		createNewCell();
@@ -58,7 +65,7 @@ public class Controller {
 	 * Start the game by read input from user.
 	 */
 	public void start() {
-		createGame();
+		newGame();
 		
 		Scanner input = new Scanner(System.in);
 		System.out.println("Please input the direction you want to move: /n");
@@ -330,6 +337,10 @@ public class Controller {
 
 	public LinkedList<Integer> getIdleQueue() {
 		return idles;
+	}
+	
+	public Cell[][] getBoard() {
+		return board;
 	}
 	
 	public static void main(String[] args) {

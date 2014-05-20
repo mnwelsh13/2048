@@ -12,7 +12,7 @@ public class TestController {
 	@Test
 	public void testCreateGame() {
 		Controller controller = new Controller();
-		controller.createGame();
+		controller.newGame();
 		
 		
 	}
