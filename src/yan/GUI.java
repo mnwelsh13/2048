@@ -82,7 +82,6 @@ public class GUI {
 		controlPanel.add(arrowPanel);
 		
 		mainPanel.add(controlPanel);
-		//frame.getContentPane().add(BorderLayout.CENTER, controlPanel);
 		
 		frame.add(mainPanel);
 		frame.setSize(600, 500);

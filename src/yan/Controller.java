@@ -139,6 +139,7 @@ public class Controller {
 	 */
 	public void moveUp() {
 		
+		// for each cell in the board merge the same
 		for(int i = 0; i < 4; i++) {
 			LinkedList<Cell> queue = new LinkedList<Cell>();
 			
@@ -152,19 +153,7 @@ public class Controller {
 				}
 			}
 			
-			if(queue.size() > 1) {
-				int m = 0;
-				while(m < (queue.size() - 1)) {
-					if(queue.get(m).getValue() == queue.get(m + 1).getValue()) {
-						queue.get(m).doubleValue();
-						int postion = queue.get(m + 1).getRow() * 4 + queue.get(m + 1).getCol();
-						idles.add(postion);
-						queue.remove(m + 1);
-					}
-				
-					m++;
-				}
-			}
+			queue = merge(queue);
 			
 			for(int n = 0; n < queue.size(); n++) {
 				board[n][i] = queue.get(n);
@@ -191,19 +180,7 @@ public class Controller {
 				}
 			}
 			
-			if(queue.size() > 1) {
-				int m = 0;
-				while(m < (queue.size() - 1)) {
-					if(queue.get(m).getValue() == queue.get(m + 1).getValue()) {
-						queue.get(m).doubleValue();
-						int postion = queue.get(m + 1).getRow() * 4 + queue.get(m + 1).getCol();
-						idles.add(postion);
-						queue.remove(m + 1);
-					}
-				
-					m++;
-				}
-			}
+			queue = merge(queue);
 			
 			for(int n = 0; n < queue.size(); n++) {
 				board[3 - n][i] = queue.get(n);
@@ -230,19 +207,7 @@ public class Controller {
 				}
 			}
 			
-			if(queue.size() > 1) {
-				int m = 0;
-				while(m < (queue.size() - 1)) {
-					if(queue.get(m).getValue() == queue.get(m + 1).getValue()) {
-						queue.get(m).doubleValue();
-						int postion = queue.get(m + 1).getRow() * 4 + queue.get(m + 1).getCol();
-						idles.add(postion);
-						queue.remove(m + 1);
-					}
-				
-					m++;
-				}
-			}
+			queue = merge(queue);
 			
 			for(int n = 0; n < queue.size(); n++) {
 				board[i][n] = queue.get(n);
@@ -269,24 +234,33 @@ public class Controller {
 				}
 			}
 			
-			if(queue.size() > 1) {
-				int m = 0;
-				while(m < (queue.size() - 1)) {
-					if(queue.get(m).getValue() == queue.get(m + 1).getValue()) {
-						queue.get(m).doubleValue();
-						int postion = queue.get(m + 1).getRow() * 4 + queue.get(m + 1).getCol();
-						idles.add(postion);
-						queue.remove(m + 1);
-					}
-				
-					m++;
-				}
-			}
+			queue = merge(queue);
 			
 			for(int n = 0; n < queue.size(); n++) {
 				board[i][3 - n] = queue.get(n);
 			}
 		}
+	}
+	
+	/** 
+	 * Merge the same number in a queue 
+	 */
+	public LinkedList<Cell> merge(LinkedList<Cell> queue) {
+		if(queue.size() > 1) {
+			int m = 0;
+			while(m < (queue.size() - 1)) {
+				if(queue.get(m).getValue() == queue.get(m + 1).getValue()) {
+					queue.get(m).doubleValue();
+					int postion = queue.get(m + 1).getRow() * 4 + queue.get(m + 1).getCol();
+					idles.add(postion);
+					queue.remove(m + 1);
+				}
+			
+				m++;
+			}
+		}
+		
+		return queue;
 	}
 	
 	/**
