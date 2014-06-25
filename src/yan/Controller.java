@@ -45,7 +45,7 @@ public class Controller {
 	private void createNewCell() {
 		if(idles.size() != 0) {
 			// get a position randomly
-			int random = (int) (Math.random() * (idles.size() - 1));		
+			int random = (int) (Math.random() * (idles.size() - 1));
 			int position = idles.get(random);
 			// remove this position from idle
 			idles.remove(random);

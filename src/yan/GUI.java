@@ -1,5 +1,8 @@
 package yan;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,62 +13,65 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class GUI {
-	private JFrame frame;
+public class GUI extends JFrame{
+	private static final long serialVersionUID = 1L;
 	private JPanel boardPanel, controlPanel, arrowPanel;
 	private JTextField scoreLabel, score;
 	private JButton newGame, up, down, left, right;
-	private JTextField[] cells;
+	private JButton[] cells;
 	
-	Controller controller;
+	ControllerV2 controller;
 	
 	public GUI() {
 		init();
-		controller = new Controller();
+		controller = new ControllerV2();
 	}
 	
 	/**
 	 * initialize the components.
 	 */
-	public void init() {
-		frame = new JFrame();
-		
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-		
+	public void init() {	
 		boardPanel = new JPanel(new GridLayout(4, 4));
-		boardPanel.setSize(400, 500);
+		boardPanel.setPreferredSize(new Dimension(500, 500));
 		
-		cells = new JTextField[16];
+		cells = new JButton[16];
 		
 		for(int i = 0; i < 16; i++) {
-			JTextField text = new JTextField();
-			//text.setEditable(false);
-			cells[i] = text;
-			boardPanel.add(text);
+			cells[i] = new JButton();
+			cells[i].setFont(new Font("Serief", Font.BOLD, 35));
+			boardPanel.add(cells[i]);
 		}
 		
-		mainPanel.add(boardPanel);
+		this.getContentPane().add(BorderLayout.WEST, boardPanel);
 		
 		controlPanel = new JPanel();
+		controlPanel.setPreferredSize(new Dimension(200, 500));
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
 		
 		scoreLabel = new JTextField("SCORE");
+		scoreLabel.setFont(new Font("Serief", Font.BOLD, 35));
+		scoreLabel.setPreferredSize(new Dimension(200, 50));
 		scoreLabel.setEditable(false);
 		controlPanel.add(scoreLabel);
 		
 		score = new JTextField("0");
+		score.setPreferredSize(new Dimension(200, 200));
+		score.setFont(new Font("Serief", Font.BOLD, 30));
 		score.setEditable(false);
 		controlPanel.add(score);
 		
+		JPanel newButtonPanel = new JPanel();
 		newGame = new JButton("New Game");
+		newGame.setPreferredSize(new Dimension(200, 70));
 		newGame.addActionListener(new NewGameListener());
-		controlPanel.add(newGame);
+		newButtonPanel.add(newGame);
+		controlPanel.add(newButtonPanel);
+		
 		
 		arrowPanel = new JPanel(new GridLayout(2, 2));
-		up = new JButton("UP");
-		
+		arrowPanel.setPreferredSize(new Dimension(100, 150));
 		DirectionListener dListener = new DirectionListener();
+		up = new JButton("UP");
 		up.addActionListener(dListener);
 		down = new JButton("DOWN");
 		down.addActionListener(dListener);
@@ -81,20 +87,44 @@ public class GUI {
 		
 		controlPanel.add(arrowPanel);
 		
-		mainPanel.add(controlPanel);
+		this.getContentPane().add(BorderLayout.EAST, controlPanel);
 		
-		frame.add(mainPanel);
-		frame.setSize(600, 500);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(700, 500);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void refresh() {
-		Cell[][] board = controller.getBoard();
+	public void refreshUI() {
+		int[][] board = controller.getBoard();
 		for(int i = 0; i < 16; i++) {
-			if(board[i / 4][i % 4] == null) continue;			
-			cells[i].setText(Integer.toString(board[i / 4][i % 4].getValue()));
+			if(board[i / 4][i % 4] == 0) {
+				cells[i].setText("");
+			} else {
+				int value = board[i / 4][i % 4];
+				cells[i].setText(Integer.toString(value));
+			}
 		}
+		
+		score.setText(Integer.toString(controller.getScore()));
+	}
+	
+	public void gameOver() {
+		cells[0].setText("");
+		cells[1].setText("");
+		cells[2].setText("");
+		cells[3].setText("");
+		cells[4].setText("G");
+		cells[5].setText("A");
+		cells[6].setText("M");
+		cells[7].setText("E");
+		cells[8].setText("O");
+		cells[9].setText("V");
+		cells[10].setText("E");
+		cells[11].setText("R");
+		cells[12].setText("");
+		cells[13].setText("");
+		cells[14].setText("");
+		cells[15].setText("");
 	}
 
 	public static void main(String[] args) {
@@ -103,31 +133,28 @@ public class GUI {
 	
 	class DirectionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == up) {
-				controller.move("u");
-				refresh();
-			} else if(e.getSource() == down) {
-				controller.move("d");
-				refresh();
-			} else if(e.getSource() == left) {
-				controller.move("l");
-				refresh();
-			} else if(e.getSource() == right) {
-				controller.move("r");
-				refresh();
-			}		
+			if(e.getSource().equals(up)) {
+				controller.move(1);
+			} else if(e.getSource().equals(down)) {
+				controller.move(2);
+			} else if(e.getSource().equals(left)) {
+				controller.move(3);
+			} else if(e.getSource().equals(right)) {
+				controller.move(4);
+			}
+			
+			if(!controller.isOver()) {
+				refreshUI();
+			} else {
+				gameOver();
+			}	
 		}
 	}
 	
 	class NewGameListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource().equals(newGame)) {
-				controller.newGame();
-				refresh();
-			}
-		}
-		
+			controller.newGame();
+			refreshUI();
+		}		
 	}
-
 }
