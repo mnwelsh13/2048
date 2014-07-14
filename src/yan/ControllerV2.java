@@ -45,13 +45,17 @@ public class ControllerV2 {
 		}
 	}
 	
+	/**
+	 * Spread different situations
+	 * @param direction
+	 */
 	public void move(int direction) {
 		switch(direction) {
-		case 1 : isChanged = moveUp(); break;
-		case 2 : isChanged = moveDown(); break;
-		case 3 : isChanged = moveLeft(); break;
-		case 4 : isChanged = moveRight(); break;
-		default : System.out.println("Invaild Command!");
+			case 1 : isChanged = moveUp(); break;
+			case 2 : isChanged = moveDown(); break;
+			case 3 : isChanged = moveLeft(); break;
+			case 4 : isChanged = moveRight(); break;
+			default : System.out.println("Invaild Command!");
 		}
 		
 		if(isChanged) {
@@ -64,25 +68,27 @@ public class ControllerV2 {
 	 */
 	public boolean moveUp() {
 		boolean result = false;
-		// for each cell in the board merge the same
-		for(int i = 0; i < 4; i++) {
-			int limit = -1;
-			for(int j = 1; j < 4; j++) {				
-				if(board[j][i] != 0) {
-					int m = j - 1;
-					while(m >= 0) {
-						if(board[m][i] == 0) {
-							if(m == 0) {
+		// for each cell in the board merge the same numbers
+		for(int i = 0; i < 4; i++) { // each col		
+			int limit = -1; // the last number which is not merged
+			for(int j = 1; j < 4; j++) { // each row
+				if(board[j][i] != 0) { // not blank
+					int m = j - 1; // the cell up to board[j][i]
+					while(m >= 0) { // cell exist
+						if(board[m][i] == 0) { // cell is blank
+							if(m == 0) { // if the cell is the top
+								// exchange the value of board[j][i] and the top
 								board[m][i] = board[j][i];
 								board[j][i] = 0;
-								limit = m;
-								result = true;
+								limit = m; // the last number that not merged is the top
+								result = true; // the board is changed
 								break;
 							} else {
-								m--;
+								m--; // else, move to the upper one
 								continue;
 							}
-						} else if(board[m][i] == board[j][i] && m > limit){
+						} else if(board[m][i] == board[j][i] && m > limit){ // the value is the same
+							// merge the two cells, add scores
 							board[j][i] = 0;
 							board[m][i] *= 2;
 							limit = m;
@@ -90,7 +96,7 @@ public class ControllerV2 {
 							result = true;
 							score += board[m][i];
 							break;
-						} else if((m + 1) != j){
+						} else if((m + 1) != j){ // move the value of board[j][i] to [m + 1][i]
 							int temp = board[j][i];
 							board[j][i] = 0;
 							board[m + 1][i] = temp;
